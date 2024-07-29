@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../page/page_pesquisa.dart';
 
 class TelacareggamentoPrincipal extends StatelessWidget {
   const TelacareggamentoPrincipal({super.key});
@@ -39,15 +40,19 @@ class TelacareggamentoPrincipal extends StatelessWidget {
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: const Color.fromARGB(255, 236, 234, 235).withOpacity(0.5),
+                        color: const Color.fromARGB(255, 236, 234, 235)
+                            .withOpacity(0.5),
                         blurRadius: 10.0,
                         offset: const Offset(2.0, 2.0),
                       ),
                     ],
                   ),
-                  child: ElevatedButton(
+                 child: ElevatedButton(
                     onPressed: () {
-                      // Adicione a funcionalidade do botão aqui
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PagePesquisa()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 238, 126, 164),
