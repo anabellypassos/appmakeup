@@ -1,4 +1,3 @@
-// product_store.dart
 import 'package:mobx/mobx.dart';
 import 'package:dio/dio.dart';
 
@@ -43,7 +42,6 @@ abstract class _ProductStore with Store {
         final productBrand = (product['brand'] ?? '').toLowerCase();
         final productTags = ((product['tags'] ?? []) as List).map((e) => e.toString().toLowerCase()).toList();
         final productCategory = (product['category'] ?? '').toLowerCase();
-
         final lowerQuery = query.toLowerCase();
 
         return productName.contains(lowerQuery) ||
@@ -52,5 +50,23 @@ abstract class _ProductStore with Store {
                productCategory.contains(lowerQuery);
       })
     );
+  }
+
+  @action
+  void filterByPriceAscending() {
+    filteredProducts.sort((a, b) {
+      double priceA = double.tryParse(a['price']?.toString() ?? '0') ?? 0;
+      double priceB = double.tryParse(b['price']?.toString() ?? '0') ?? 0;
+      return priceA.compareTo(priceB);
+    });
+  }
+
+  @action
+  void filterByPriceDescending() {
+    filteredProducts.sort((a, b) {
+      double priceA = double.tryParse(a['price']?.toString() ?? '0') ?? 0;
+      double priceB = double.tryParse(b['price']?.toString() ?? '0') ?? 0;
+      return priceB.compareTo(priceA);
+    });
   }
 }
