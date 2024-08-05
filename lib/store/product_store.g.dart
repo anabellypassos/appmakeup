@@ -80,6 +80,28 @@ mixin _$ProductStore on _ProductStore, Store {
   }
 
   @override
+  void filterByPriceAscending() {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.filterByPriceAscending');
+    try {
+      return super.filterByPriceAscending();
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void filterByPriceDescending() {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.filterByPriceDescending');
+    try {
+      return super.filterByPriceDescending();
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 products: ${products},

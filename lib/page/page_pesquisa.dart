@@ -17,6 +17,17 @@ class _PagePesquisaState extends State<PagePesquisa> {
   void initState() {
     super.initState();
     productStore.fetchProducts();
+
+    // Adiciona um listener para o TextEditingController
+    _searchController.addListener(_performSearch);
+  }
+
+  @override
+  void dispose() {
+    // Remove o listener ao desmontar o widget
+    _searchController.removeListener(_performSearch);
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _performSearch() {

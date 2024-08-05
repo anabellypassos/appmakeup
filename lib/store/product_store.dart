@@ -36,17 +36,21 @@ abstract class _ProductStore with Store {
       return;
     }
 
+    final lowerQuery = query.toLowerCase();
+
     filteredProducts = ObservableList.of(
       products.where((product) {
         final productName = (product['name'] ?? '').toLowerCase();
         final productBrand = (product['brand'] ?? '').toLowerCase();
         final productTags = ((product['tags'] ?? []) as List).map((e) => e.toString().toLowerCase()).toList();
         final productCategory = (product['category'] ?? '').toLowerCase();
-        final lowerQuery = query.toLowerCase();
+
+        // Verifica se qualquer uma das tags contém a consulta
+        bool tagsMatch = productTags.any((tag) => tag.contains(lowerQuery));
 
         return productName.contains(lowerQuery) ||
                productBrand.contains(lowerQuery) ||
-               productTags.any((tag) => tag.contains(lowerQuery)) ||
+               tagsMatch ||
                productCategory.contains(lowerQuery);
       })
     );

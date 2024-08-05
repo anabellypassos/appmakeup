@@ -51,14 +51,14 @@ class TelacareggamentoPrincipal extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const PagePesquisa()),
+                        MaterialPageRoute(builder: (context) => const PagePesquisa() ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 238, 126, 164),
                     ),
                     child: const Text(
-                      'Começar',
+                      'To start',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
