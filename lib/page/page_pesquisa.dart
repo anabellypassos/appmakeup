@@ -12,19 +12,18 @@ class PagePesquisa extends StatefulWidget {
 class _PagePesquisaState extends State<PagePesquisa> {
   final productStore = ProductStore();
   final TextEditingController _searchController = TextEditingController();
+  String _selectedSortOption = 'Ordenar por'; // Inicialmente não selecionado
 
   @override
   void initState() {
     super.initState();
     productStore.fetchProducts();
 
-    // Adiciona um listener para o TextEditingController
     _searchController.addListener(_performSearch);
   }
 
   @override
   void dispose() {
-    // Remove o listener ao desmontar o widget
     _searchController.removeListener(_performSearch);
     _searchController.dispose();
     super.dispose();
@@ -34,12 +33,23 @@ class _PagePesquisaState extends State<PagePesquisa> {
     productStore.filterProducts(_searchController.text);
   }
 
-  void _filterByPriceAscending() {
-    productStore.filterByPriceAscending();
-  }
-
-  void _filterByPriceDescending() {
-    productStore.filterByPriceDescending();
+  void _handleSortOptionChange(String? newValue) {
+    setState(() {
+      _selectedSortOption = newValue ?? 'Ordenar por';
+      switch (_selectedSortOption) {
+        case 'Menor Preço':
+          productStore.filterByPriceAscending();
+          break;
+        case 'Maior Preço':
+          productStore.filterByPriceDescending();
+          break;
+        case 'Reverter':
+          productStore.resetFilter();
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   @override
@@ -76,19 +86,25 @@ class _PagePesquisaState extends State<PagePesquisa> {
       backgroundColor: Colors.pink[50],
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _filterByPriceAscending,
-                child: const Text('Menor Preço'),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: _filterByPriceDescending,
-                child: const Text('Maior Preço'),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: DropdownButton<String>(
+              value: _selectedSortOption,
+              onChanged: _handleSortOptionChange,
+              items: <String>[
+                'Ordenar por',
+                'Menor Preço',
+                'Maior Preço',
+                'Reverter'
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              dropdownColor: Colors.pink[100],
+              icon: Icon(Icons.arrow_drop_down, color: Colors.pink[300]),
+            ),
           ),
           Expanded(
             child: Observer(

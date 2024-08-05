@@ -73,4 +73,9 @@ abstract class _ProductStore with Store {
       return priceB.compareTo(priceA);
     });
   }
+  @action
+void resetFilter() {
+  filteredProducts = ObservableList.of(products);
+}
+
 }

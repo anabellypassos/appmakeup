@@ -102,6 +102,17 @@ mixin _$ProductStore on _ProductStore, Store {
   }
 
   @override
+  void resetFilter() {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.resetFilter');
+    try {
+      return super.resetFilter();
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 products: ${products},
