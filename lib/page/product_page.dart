@@ -21,6 +21,9 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Produtos'),
+      ),
       body: Observer(
         builder: (_) {
           if (productStore.isLoading) {
@@ -31,9 +34,10 @@ class _ProductPageState extends State<ProductPage> {
             itemCount: productStore.products.length,
             itemBuilder: (context, index) {
               final product = productStore.products[index];
+
               return Container(
-                padding: const EdgeInsets.all(12.0), 
-                margin: const EdgeInsets.symmetric(vertical: 8.0), 
+                padding: const EdgeInsets.all(12.0),
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
@@ -42,26 +46,57 @@ class _ProductPageState extends State<ProductPage> {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 6,
-                      offset: const Offset(0, 3), 
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      product['name'],
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+                    // Exibir a imagem do produto
+                    Container(
+                      width: 80.0,
+                      height: 80.0,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: DecorationImage(
+                          image: NetworkImage(product.imageLink ?? ''),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 6.0), 
-                    Text(
-                      product['brand'] ?? 'Sem marca',
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
+                    // Exibir os detalhes do produto
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name ?? 'No name',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 6.0),
+                          Text(
+                            product.brand ?? 'No brand',
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 6.0),
+                          Text(
+                            product.price != null
+                                ? '\$${product.price}'
+                                : 'Price not available',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

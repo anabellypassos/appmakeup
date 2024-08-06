@@ -12,13 +12,12 @@ class PagePesquisa extends StatefulWidget {
 class _PagePesquisaState extends State<PagePesquisa> {
   final productStore = ProductStore();
   final TextEditingController _searchController = TextEditingController();
-  String _selectedSortOption = 'Ordenar por'; // Inicialmente não selecionado
+  String _selectedSortOption = 'Ordenar por';
 
   @override
   void initState() {
     super.initState();
     productStore.fetchProducts();
-
     _searchController.addListener(_performSearch);
   }
 
@@ -117,52 +116,88 @@ class _PagePesquisaState extends State<PagePesquisa> {
                   return const Center(child: Text('Nenhum produto encontrado.'));
                 }
 
-                return ListView.builder(
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Número de colunas
+                    crossAxisSpacing: 10.0, // Espaçamento horizontal entre os cards
+                    mainAxisSpacing: 10.0, // Espaçamento vertical entre os cards
+                    childAspectRatio: 0.7, // Proporção do tamanho dos cards
+                  ),
                   itemCount: productStore.filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = productStore.filteredProducts[index];
+
                     return Container(
-                      padding: const EdgeInsets.all(12.0),
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(143, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
+                      margin: const EdgeInsets.all(10.0), // Margem ao redor do card
+                      child: Card(
+                        elevation: 4, // Adiciona uma leve elevação ao card
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (product.imageLink != null)
+                                Center(
+                                  child: Image.network(
+                                    product.imageLink!,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (context, child, progress) {
+                                      if (progress == null) {
+                                        return child;
+                                      } else {
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.expectedTotalBytes != null
+                                                ? progress.cumulativeBytesLoaded / (progress.expectedTotalBytes ?? 1)
+                                                : null,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Icon(
+                                          Icons.image_not_supported,
+                                          size: 120,
+                                          color: Colors.grey[400],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                product.name ?? 'Nome não disponível',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                product.brand ?? 'Sem marca',
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.grey,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                product.price != null
+                                    ? 'Preço: \$${product.price}'
+                                    : 'Preço não disponível',
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.grey,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product['name'] ?? 'Nome não disponível',
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 6.0),
-                          Text(
-                            product['brand'] ?? 'Sem marca',
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 6.0),
-                          Text(
-                            'Preço: \$${product['price'] ?? '0.00'}',
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   },
