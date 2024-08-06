@@ -75,12 +75,12 @@ class _PagePesquisaState extends State<PagePesquisa> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.black),
+              icon: const Icon(Icons.search, color:  Color.fromARGB(255, 240, 98, 146)),
               onPressed: _performSearch,
             ),
           ],
         ),
-        backgroundColor: const Color.fromARGB(255, 241, 141, 174),
+        backgroundColor:const  Color.fromARGB(255, 253, 253, 253),
       ),
       backgroundColor: Colors.pink[50],
       body: Column(
@@ -102,7 +102,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                 );
               }).toList(),
               dropdownColor: Colors.pink[100],
-              icon: Icon(Icons.arrow_drop_down, color: Colors.pink[300]),
+              icon: const Icon(Icons.arrow_drop_down,  color:  Color.fromARGB(255, 240, 98, 146)),
             ),
           ),
           Expanded(
@@ -249,6 +249,21 @@ class _PagePesquisaState extends State<PagePesquisa> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home,color: Color.fromARGB(255, 240, 98, 146)),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category,color: Color.fromARGB(255, 240, 98, 146)),
+            label: 'Categorias',
+          ),
+        ],
+        onTap: (index) {
+          // Handle navigation here
+        },
       ),
     );
   }
