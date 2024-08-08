@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/product_store.dart';
+import './pagina_categorias.dart';
 
 class PagePesquisa extends StatefulWidget {
-  const PagePesquisa({super.key});
+  final String? selectedBrand;
+
+  const PagePesquisa({super.key, this.selectedBrand});
 
   @override
   State<PagePesquisa> createState() => _PagePesquisaState();
@@ -17,7 +20,11 @@ class _PagePesquisaState extends State<PagePesquisa> {
   @override
   void initState() {
     super.initState();
-    productStore.fetchProducts();
+    productStore.fetchProducts().then((_) {
+      if (widget.selectedBrand != null) {
+        productStore.filterByBrand(widget.selectedBrand!);
+      }
+    });
     _searchController.addListener(_performSearch);
   }
 
@@ -57,6 +64,28 @@ class _PagePesquisaState extends State<PagePesquisa> {
       appBar: AppBar(
         title: Row(
           children: [
+            const Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    'Glam Guru',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.pink,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child: TextField(
                 controller: _searchController,
@@ -75,12 +104,12 @@ class _PagePesquisaState extends State<PagePesquisa> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.search, color:  Color.fromARGB(255, 240, 98, 146)),
+              icon: const Icon(Icons.search, color: Color.fromARGB(255, 240, 98, 146)),
               onPressed: _performSearch,
             ),
           ],
         ),
-        backgroundColor:const  Color.fromARGB(255, 253, 253, 253),
+        backgroundColor: const Color.fromARGB(255, 253, 253, 253),
       ),
       backgroundColor: Colors.pink[50],
       body: Column(
@@ -102,7 +131,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                 );
               }).toList(),
               dropdownColor: Colors.pink[100],
-              icon: const Icon(Icons.arrow_drop_down,  color:  Color.fromARGB(255, 240, 98, 146)),
+              icon: const Icon(Icons.arrow_drop_down, color: Color.fromARGB(255, 240, 98, 146)),
             ),
           ),
           Expanded(
@@ -122,9 +151,9 @@ class _PagePesquisaState extends State<PagePesquisa> {
                     final product = productStore.filteredProducts[index];
 
                     return Container(
-                      margin: const EdgeInsets.all(10.0), // Margem ao redor do card
+                      margin: const EdgeInsets.all(10.0),
                       child: Card(
-                        elevation: 4, // Adiciona uma leve elevação ao card
+                        elevation: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -134,7 +163,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                                 Center(
                                   child: Image.network(
                                     product.imageLink!,
-                                    height: 180, // Aumente a altura da imagem conforme necessário
+                                    height: 180,
                                     fit: BoxFit.cover,
                                     loadingBuilder: (context, child, progress) {
                                       if (progress == null) {
@@ -153,7 +182,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                                       return Center(
                                         child: Icon(
                                           Icons.image_not_supported,
-                                          size: 180, // Ajuste o tamanho do ícone conforme necessário
+                                          size: 180,
                                           color: Colors.grey[400],
                                         ),
                                       );
@@ -253,16 +282,26 @@ class _PagePesquisaState extends State<PagePesquisa> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home,color: Color.fromARGB(255, 240, 98, 146)),
+            icon: Icon(Icons.home, color: Color.fromARGB(255, 240, 98, 146)),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category,color: Color.fromARGB(255, 240, 98, 146)),
+            icon: Icon(Icons.category, color: Color.fromARGB(255, 240, 98, 146)),
             label: 'Categorias',
           ),
         ],
         onTap: (index) {
-          // Handle navigation here
+          switch (index) {
+            case 0:
+              // Navegar para a página Home, se necessário
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  const PaginaCategorias()),
+              );
+              break;
+          }
         },
       ),
     );

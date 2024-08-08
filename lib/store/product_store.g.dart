@@ -113,6 +113,17 @@ mixin _$ProductStore on _ProductStore, Store {
   }
 
   @override
+  void filterByBrand(String brand) {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.filterByBrand');
+    try {
+      return super.filterByBrand(brand);
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 products: ${products},
