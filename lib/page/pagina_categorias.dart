@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'marca.dart'; // Certifique-se de que o caminho para o arquivo marca.dart está correto.
-import 'produto_categorias.dart';
+import 'categoria.dart';
 import 'tags.dart';
 class PaginaCategorias extends StatelessWidget {
   const PaginaCategorias({super.key});
@@ -47,7 +47,7 @@ class PaginaCategorias extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>const ProdutoCategorias()), // Navega para a página Marca
+                  MaterialPageRoute(builder: (context) =>const Categoria()), // Navega para a página Marca
                 );
               },
               child: ClipRRect(

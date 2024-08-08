@@ -5,8 +5,10 @@ import './pagina_categorias.dart';
 
 class PagePesquisa extends StatefulWidget {
   final String? selectedBrand;
+  final String? selectedCategory;
+  final String? selectedTag;
 
-  const PagePesquisa({super.key, this.selectedBrand});
+  const PagePesquisa({super.key, this.selectedBrand, this.selectedCategory, this.selectedTag});
 
   @override
   State<PagePesquisa> createState() => _PagePesquisaState();
@@ -16,6 +18,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
   final productStore = ProductStore();
   final TextEditingController _searchController = TextEditingController();
   String _selectedSortOption = 'Ordenar por';
+  int _selectedIndex = 1; // Índice do menu inferior ativo
 
   @override
   void initState() {
@@ -23,6 +26,10 @@ class _PagePesquisaState extends State<PagePesquisa> {
     productStore.fetchProducts().then((_) {
       if (widget.selectedBrand != null) {
         productStore.filterByBrand(widget.selectedBrand!);
+      } else if (widget.selectedCategory != null) {
+        productStore.filterByCategory(widget.selectedCategory!);
+      } else if (widget.selectedTag != null) {
+        productStore.filterByTag(widget.selectedTag!);
       }
     });
     _searchController.addListener(_performSearch);
@@ -56,6 +63,32 @@ class _PagePesquisaState extends State<PagePesquisa> {
           break;
       }
     });
+  }
+
+  void _onBottomNavBarTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        // Navegar para a página Home, se necessário
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        // Já estamos na tela de pesquisa, não é necessário navegar
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PaginaCategorias()),
+        );
+        break;
+      case 3:
+        // Navegar para a tela de perfil, se necessário
+        Navigator.pushNamed(context, '/perfil');
+        break;
+    }
   }
 
   @override
@@ -149,6 +182,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                   itemCount: productStore.filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = productStore.filteredProducts[index];
+                    final price = double.tryParse(product.price ?? '0.0') ?? 0.0;
 
                     return Container(
                       margin: const EdgeInsets.all(10.0),
@@ -209,64 +243,13 @@ class _PagePesquisaState extends State<PagePesquisa> {
                               ),
                               const SizedBox(height: 8.0),
                               Text(
-                                product.price != null
-                                    ? 'Preço: \$${product.price}'
-                                    : 'Preço não disponível',
+                                'R\$ ${price.toStringAsFixed(2)}',
                                 style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.pink,
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 12.0),
-                              if (product.productColors != null && product.productColors!.isNotEmpty)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Cores:',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: product.productColors!.length,
-                                        itemBuilder: (context, colorIndex) {
-                                          final color = product.productColors![colorIndex];
-                                          return Container(
-                                            margin: const EdgeInsets.only(right: 8.0),
-                                            width: 40,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              color: color.hexValue != null
-                                                  ? Color(int.parse(color.hexValue!.replaceFirst('#', '0xff')))
-                                                  : Colors.grey,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Colors.grey,
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                color.colourName ?? '',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
                             ],
                           ),
                         ),
@@ -279,7 +262,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
+       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home, color: Color.fromARGB(255, 240, 98, 146)),
@@ -298,7 +281,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
             case 1:
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  const PaginaCategorias()),
+                MaterialPageRoute(builder: (context) => const PaginaCategorias()),
               );
               break;
           }

@@ -84,6 +84,20 @@ void filterByBrand(String brand) {
     products.where((product) => product.brand?.toLowerCase() == brand.toLowerCase()).toList(),
   );
 }
+@action
+void filterByCategory(String category) {
+  filteredProducts = ObservableList.of(
+    products.where((product) => product.category?.toLowerCase() == category.toLowerCase()).toList(),
+  );
+
+} 
+@action
+void filterByTag(String tag) {
+  filteredProducts = ObservableList.of(
+    products.where((product) => product.tagList?.contains(tag) ?? false).toList(),
+  );
+}
+
 
 }
 

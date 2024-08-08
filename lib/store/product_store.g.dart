@@ -124,6 +124,28 @@ mixin _$ProductStore on _ProductStore, Store {
   }
 
   @override
+  void filterByCategory(String category) {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.filterByCategory');
+    try {
+      return super.filterByCategory(category);
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void filterByTag(String tag) {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.filterByTag');
+    try {
+      return super.filterByTag(tag);
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 products: ${products},

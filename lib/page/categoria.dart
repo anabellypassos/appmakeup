@@ -3,14 +3,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/product_store.dart';
 import './page_pesquisa.dart';
 
-class Tags extends StatefulWidget {
-  const Tags({super.key});
+class Categoria extends StatefulWidget {
+  const Categoria({super.key});
 
   @override
-  _TagsState createState() => _TagsState();
+  _CategoriaState createState() => _CategoriaState();
 }
 
-class _TagsState extends State<Tags> {
+class _CategoriaState extends State<Categoria> {
   final productStore = ProductStore();
 
   @override
@@ -24,7 +24,7 @@ class _TagsState extends State<Tags> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tags'),
+        title: const Text('Categorias'),
       ),
       body: Observer(
         builder: (_) {
@@ -32,24 +32,25 @@ class _TagsState extends State<Tags> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Extrair as tags únicas dos produtos
-          final tags = productStore.products
-              .expand((product) => product.tagList ?? [])
+          // Extrair as categorias únicas dos produtos
+          final categories = productStore.products
+              .map((product) => product.category)
+              .where((category) => category != null)
               .toSet()
               .toList();
 
           return ListView.builder(
-            itemCount: tags.length,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
-              final tag = tags[index];
+              final category = categories[index];
               return ListTile(
-                title: Text(tag),
+                title: Text(category ?? 'Sem categoria'),
                 onTap: () {
-                  // Navegar para a tela de pesquisa e filtrar por tag
+                  // Navegar para a tela de pesquisa e filtrar por categoria
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PagePesquisa(selectedTag: tag),
+                      builder: (context) => PagePesquisa(selectedCategory: category),
                     ),
                   );
                 },
