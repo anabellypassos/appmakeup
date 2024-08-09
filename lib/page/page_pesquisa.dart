@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/product_store.dart';
 import './pagina_categorias.dart';
+import '../page/info_produtos.dart';
 
 class PagePesquisa extends StatefulWidget {
   final String? selectedBrand;
@@ -184,73 +185,83 @@ class _PagePesquisaState extends State<PagePesquisa> {
                     final product = productStore.filteredProducts[index];
                     final price = double.tryParse(product.price ?? '0.0') ?? 0.0;
 
-                    return Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child: Card(
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (product.imageLink != null)
-                                Center(
-                                  child: Image.network(
-                                    product.imageLink!,
-                                    height: 180,
-                                    fit: BoxFit.cover,
-                                    loadingBuilder: (context, child, progress) {
-                                      if (progress == null) {
-                                        return child;
-                                      } else {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InfoProduto(product: product),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(10.0),
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (product.imageLink != null)
+                                  Center(
+                                    child: Image.network(
+                                      product.imageLink!,
+                                      height: 180,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (context, child, progress) {
+                                        if (progress == null) {
+                                          return child;
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: progress.expectedTotalBytes != null
+                                                  ? progress.cumulativeBytesLoaded / (progress.expectedTotalBytes ?? 1)
+                                                  : null,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      errorBuilder: (context, error, stackTrace) {
                                         return Center(
-                                          child: CircularProgressIndicator(
-                                            value: progress.expectedTotalBytes != null
-                                                ? progress.cumulativeBytesLoaded / (progress.expectedTotalBytes ?? 1)
-                                                : null,
+                                          child: Icon(
+                                            Icons.image_not_supported,
+                                            size: 180,
+                                            color: Colors.grey[400],
                                           ),
                                         );
-                                      }
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Center(
-                                        child: Icon(
-                                          Icons.image_not_supported,
-                                          size: 180,
-                                          color: Colors.grey[400],
-                                        ),
-                                      );
-                                    },
+                                      },
+                                    ),
+                                  ),
+                                const SizedBox(height: 12.0),
+                                Text(
+                                  product.name ?? 'Name not available',
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  product.brand ?? 'Unbranded',
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.grey,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  'R\$ ${price.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.pink,
                                   ),
                                 ),
-                              const SizedBox(height: 12.0),
-                              Text(
-                                product.name ?? 'Name not available',
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                product.brand ?? 'Unbranded',
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                'R\$ ${price.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.pink,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
