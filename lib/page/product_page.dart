@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../store/product_store.dart';
 
 class ProductPage extends StatefulWidget {
@@ -53,17 +54,21 @@ class _ProductPageState extends State<ProductPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Exibir a imagem do produto
+                    // Exibir a imagem do produto usando CachedNetworkImage
                     Container(
                       width: double.infinity,
                       height: 120.0,
                       margin: const EdgeInsets.only(bottom: 8.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        image: DecorationImage(
-                          image: NetworkImage(product.imageLink ?? ''),
-                          fit: BoxFit.cover,
-                        ),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: product.imageLink ?? '',
+                        placeholder: (context, url) =>
+                            const Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        fit: BoxFit.cover,
                       ),
                     ),
                     // Exibir os detalhes do produto
@@ -95,7 +100,8 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ),
                     const SizedBox(height: 6.0),
-                    if (product.productColors != null && product.productColors!.isNotEmpty)
+                    if (product.productColors != null &&
+                        product.productColors!.isNotEmpty)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

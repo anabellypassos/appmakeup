@@ -280,7 +280,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category, color: Color.fromARGB(255, 240, 98, 146)),
+            icon: Icon(Icons.category_outlined, color: Color.fromARGB(255, 240, 98, 146)),
             label: 'Categories',
           ),
         ],

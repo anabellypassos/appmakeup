@@ -20,8 +20,30 @@ class InfoProduto extends StatelessWidget {
             if (product.imageLink != null)
               Image.network(
                 product.imageLink!,
-                height: 250,
+                height: 450,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error,
+                          size: 50.0,
+                          color: Colors.red,
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          'Imagem não disponível',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             const SizedBox(height: 16.0),
 

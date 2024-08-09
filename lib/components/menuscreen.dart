@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category,color:  Color.fromARGB(255, 240, 98, 146),),
+            icon: Icon(Icons.category_rounded,color:  Color.fromARGB(255, 240, 98, 146),),
             label: 'Categorias',
           ),
         ],
