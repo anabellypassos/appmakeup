@@ -24,7 +24,7 @@ class _MarcaState extends State<Marca> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Marcas'),
+        title: const Text('Brands'),
       ),
       body: Observer(
         builder: (_) {
@@ -44,7 +44,7 @@ class _MarcaState extends State<Marca> {
             itemBuilder: (context, index) {
               final brand = brands[index];
               return ListTile(
-                title: Text(brand ?? 'Sem marca'),
+                title: Text(brand ?? 'Unbranded'),
                 onTap: () {
                   // Navegar para a tela de pesquisa e filtrar por marca
                   Navigator.push(

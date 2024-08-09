@@ -24,7 +24,7 @@ class _CategoriaState extends State<Categoria> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categorias'),
+        title: const Text('Categories'),
       ),
       body: Observer(
         builder: (_) {
@@ -44,7 +44,7 @@ class _CategoriaState extends State<Categoria> {
             itemBuilder: (context, index) {
               final category = categories[index];
               return ListTile(
-                title: Text(category ?? 'Sem categoria'),
+                title: Text(category ?? 'Uncategorized'),
                 onTap: () {
                   // Navegar para a tela de pesquisa e filtrar por categoria
                   Navigator.push(

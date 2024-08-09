@@ -17,7 +17,7 @@ class PagePesquisa extends StatefulWidget {
 class _PagePesquisaState extends State<PagePesquisa> {
   final productStore = ProductStore();
   final TextEditingController _searchController = TextEditingController();
-  String _selectedSortOption = 'Ordenar por';
+  String _selectedSortOption = 'Sort by';
   int _selectedIndex = 1; // Índice do menu inferior ativo
 
   @override
@@ -48,15 +48,15 @@ class _PagePesquisaState extends State<PagePesquisa> {
 
   void _handleSortOptionChange(String? newValue) {
     setState(() {
-      _selectedSortOption = newValue ?? 'Ordenar por';
+      _selectedSortOption = newValue ?? 'Sort by';
       switch (_selectedSortOption) {
-        case 'Menor Preço':
+        case 'Lowest Price':
           productStore.filterByPriceAscending();
           break;
-        case 'Maior Preço':
+        case 'Highest Price':
           productStore.filterByPriceDescending();
           break;
-        case 'Reverter':
+        case 'Reset':
           productStore.resetFilter();
           break;
         default:
@@ -123,7 +123,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: 'Pesquisar produto...',
+                  hintText: 'search',
                   hintStyle: TextStyle(color: Colors.pink[200]),
                   fillColor: Colors.pink[100],
                   filled: true,
@@ -153,10 +153,10 @@ class _PagePesquisaState extends State<PagePesquisa> {
               value: _selectedSortOption,
               onChanged: _handleSortOptionChange,
               items: <String>[
-                'Ordenar por',
-                'Menor Preço',
-                'Maior Preço',
-                'Reverter'
+                'Sort by',
+                'Lowest Price',
+                'Highest Price',
+                'Reset'
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -175,7 +175,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                 }
 
                 if (productStore.filteredProducts.isEmpty) {
-                  return const Center(child: Text('Nenhum produto encontrado.'));
+                  return const Center(child: Text('No products found.'));
                 }
 
                 return ListView.builder(
@@ -225,7 +225,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                                 ),
                               const SizedBox(height: 12.0),
                               Text(
-                                product.name ?? 'Nome não disponível',
+                                product.name ?? 'Name not available',
                                 style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -234,7 +234,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
                               ),
                               const SizedBox(height: 8.0),
                               Text(
-                                product.brand ?? 'Sem marca',
+                                product.brand ?? 'Unbranded',
                                 style: const TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.grey,
@@ -270,7 +270,7 @@ class _PagePesquisaState extends State<PagePesquisa> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category, color: Color.fromARGB(255, 240, 98, 146)),
-            label: 'Categorias',
+            label: 'Categories',
           ),
         ],
         onTap: (index) {
